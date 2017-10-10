@@ -3,9 +3,11 @@ package com.accherniakocich.android.druzina.Button_1;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.accherniakocich.android.druzina.MainActivity;
 import com.accherniakocich.android.druzina.R;
 
 public class Rayons extends AppCompatActivity {
@@ -33,6 +35,9 @@ public class Rayons extends AppCompatActivity {
 
     public void clickOnButton(View view) {
         Intent intent = new Intent(Rayons.this,HarakterZhalobi.class);
+        Button button = (Button)view;
+        //Log.d(MainActivity.LOG_TAG,"text = " + button.getText());
+        intent.putExtra("text_name_rayon",button.getText().toString());
         startActivity(intent);
     }
 }

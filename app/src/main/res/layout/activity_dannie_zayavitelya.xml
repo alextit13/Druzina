@@ -23,14 +23,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <EditText
+                android:id="@+id/et1"
                 android:hint="@string/hint_adress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <EditText
+                android:id="@+id/et2"
                 android:hint="@string/hint_contacts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <EditText
+                android:id="@+id/et3"
                 android:hint="@string/hint_FIO"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -52,11 +55,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <RadioButton
+                            android:id="@+id/cb1"
                             android:layout_marginEnd="20sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/da"/>
                         <RadioButton
+                            android:id="@+id/cb2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/net"/>
@@ -64,6 +69,7 @@
                 </TableRow>
             </LinearLayout>
             <EditText
+                android:id="@+id/et_sit"
                 android:hint="@string/opishite_situatsiyu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,12 +82,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/b1"
             android:layout_margin="5sp"
             android:layout_weight="1"
             android:text="@string/send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <Button
+            android:id="@+id/b2"
             android:layout_margin="5sp"
             android:layout_weight="1"
             android:text="@string/cancel"
