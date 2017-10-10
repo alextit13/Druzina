@@ -19,6 +19,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Button_1.Rayons"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Button_1.HarakterZhalobi"
+            android:parentActivityName=".Button_1.Rayons" />
+        <activity
+            android:name=".Button_1.DannieZayavitelya"
+            android:parentActivityName=".Button_1.HarakterZhalobi">
+        </activity>
+        <activity
+            android:name=".Button_3.Registration"
+            android:parentActivityName=".MainActivity">
+        </activity>
+        <activity android:name=".Kabinet"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

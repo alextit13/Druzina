@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.accherniakocich.android.druzina.Button_3.Registration">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_margin="10sp"
+                android:text="@string/registration_only"
+                android:textColor="#000000"
+                android:textSize="30sp"
+                android:layout_marginBottom="20sp"
+                android:gravity="top|center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/FIODrizinnika"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:hint="@string/hint_FIO_druzinnika"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/rayon"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:hint="@string/hint_rayon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/ulitsa_marshrut"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:hint="@string/hint_marshrut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/phone"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:hint="@string/hint_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:id="@+id/number_of_udostoverenie"
+                android:layout_marginStart="5sp"
+                android:layout_marginEnd="5sp"
+                android:hint="@string/hint_udostoverenie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <Button
+                android:layout_marginStart="10sp"
+                android:layout_marginEnd="10sp"
+                android:text="@string/registration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#deffbe"
+                android:id="@+id/button_registration_zastup"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
