@@ -18,7 +18,6 @@ import android.widget.Button;
 import com.accherniakocich.android.druzina.Button_1.Rayons;
 import com.accherniakocich.android.druzina.Button_3.Registration;
 import com.accherniakocich.android.druzina.classes.Druzinnik;
-import com.accherniakocich.android.druzina.classes.Zaloba;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

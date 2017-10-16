@@ -1,38 +1,23 @@
 package com.accherniakocich.android.druzina;
 
-import android.app.Application;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-
-import com.accherniakocich.android.druzina.Button_3.Registration;
-import com.accherniakocich.android.druzina.classes.Druzinnik;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -40,11 +25,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import static android.R.id.list;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -53,16 +33,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int MY_PERMISSION_REQUEST_LOCATION = 1;
     private final static String LOG_TAG = "MyLogs";
 
-    private double lat;
-    private double lon;
-
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
     private String ret = "";
-    private ArrayList<Druzinnik> listDruzinniki;
-
-    private String name;
-    private Location location;
-
-    private double [] coordinates;
 
 
     @Override
@@ -73,92 +46,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        listDruzinniki = new ArrayList<>();
-        name = readFromFile(this);
-        Intent intent = getIntent();
-        listDruzinniki = (ArrayList<Druzinnik>) intent.getSerializableExtra("list");
-        startLocated();
+
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference().child("Дружинники");
+        readFromFile();
     }
 
-    private double[] startLocated() {
-        coordinates = new double[2];
-
-        if (ContextCompat.checkSelfPermission(MapsActivity.this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MapsActivity.this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)){
-                ActivityCompat.requestPermissions(MapsActivity.this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},MY_PERMISSION_REQUEST_LOCATION);
-            }else{
-                ActivityCompat.requestPermissions(MapsActivity.this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},MY_PERMISSION_REQUEST_LOCATION);
-            }
-        }else{
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            try {
-                //Log.d(LOG_TAG,"We are here =" + hereLocate(location.getLatitude(),location.getLongitude()));
-                //Log.d(LOG_TAG,"latit =" + location.getLatitude() + ", long = " + location.getLongitude());
-
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            for (;;){
-                                Thread.sleep(2000);
-                                coordinates[0] = location.getLatitude();
-                                coordinates[1] = location.getLongitude();
-
-                                lat = location.getLatitude();
-                                lon = location.getLongitude();
-
-                                FirebaseDatabase database;
-                                DatabaseReference reference_lat;
-                                DatabaseReference reference_lon;
-
-                                database = FirebaseDatabase.getInstance();
-                                reference_lat = database.getReference().child("Дружинники").child("Иванов Иван Васильевич").child("lat");
-                                reference_lon = database.getReference().child("Дружинники").child("Иванов Иван Васильевич").child("lon");
-
-                                reference_lat.setValue(5);
-                                reference_lon.setValue(lon);
-
-                                Log.d(LOG_TAG,"lat =" + lat + " , lon = " + lon);
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                Thread thread = new Thread(runnable);
-                thread.start();
-
-
-            }catch (Exception e){
-                e.printStackTrace();
-                Toast.makeText(MapsActivity.this,"Not found!",Toast.LENGTH_SHORT).show();
-            }
-        }
-        return coordinates;
-    }
-
-    public String hereLocate(double lat, double lon){
-        String curCity = "";
-
-        Geocoder geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
-        List<Address> addressList;
-
-        try {
-            addressList = geocoder.getFromLocation(lat,lon,1);
-            if (addressList.size()>0){
-                curCity = addressList.get(0).getLocality();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return curCity;
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode){
@@ -170,7 +63,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
                         try {
-                            Log.d(LOG_TAG,"We are here =" + hereLocate(location.getLatitude(),location.getLongitude()));
+                            Log.d(LOG_TAG,"We are here =" + location);
+
                         }catch (Exception e){
                             e.printStackTrace();
                             Toast.makeText(MapsActivity.this,"Not found!",Toast.LENGTH_SHORT).show();
@@ -188,11 +82,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Log.d(LOG_TAG,"name = " + ret);
-        DatabaseReference reference_lat = database.getReference().child("Дружинники").child("Иванов Иван Васильевич").child("lat");
-
-        LatLng sydney = new LatLng(lat, lon);
+        Log.d(MainActivity.LOG_TAG,"ret = " + ret);
+        LatLng sydney = new LatLng(50,50);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
@@ -203,10 +94,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private String readFromFile(Context context) {
-
+    private void readFromFile(){
         try {
-            InputStream inputStream = context.openFileInput("name.txt");
+            InputStream inputStream = this.openFileInput("name.txt");
 
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -220,6 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 inputStream.close();
                 ret = stringBuilder.toString();
+                Log.d(LOG_TAG,"ret =" + ret);
             }
         }
         catch (FileNotFoundException e) {
@@ -227,7 +118,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
         }
-
-        return ret;
     }
 }
