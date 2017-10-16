@@ -44,4 +44,9 @@
     <string name="registration_only">Регистрация</string>
     <string name="narushenie_zafiksirovano">Нарушение зафиксировано</string>
     <string name="btn_sos">SOS</string>
+    <string name="end_patrul">Закончить патрулирование</string>
+    <string name="na_patrule">Сейчас на патрулировании:</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="shared_preferencess">name</string>
 </resources>

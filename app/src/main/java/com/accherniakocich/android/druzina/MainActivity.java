@@ -17,13 +17,29 @@ import android.widget.Button;
 
 import com.accherniakocich.android.druzina.Button_1.Rayons;
 import com.accherniakocich.android.druzina.Button_3.Registration;
+import com.accherniakocich.android.druzina.classes.Druzinnik;
+import com.accherniakocich.android.druzina.classes.Zaloba;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String LOG_TAG = "MyLogs";
 
     private Button button_1,button_2,button_3;
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+
+    private ArrayList<Druzinnik> list;
+    private long listCount = 0;
+    private ChildEventListener mChildEventListeber;
+    private Druzinnik druzinnik;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +107,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Личный кабинет дружинника
-            Intent intent = new Intent(MainActivity.this,Kabinet.class);
-            startActivity(intent);
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -116,6 +130,8 @@ public class MainActivity extends AppCompatActivity
         button_2 = (Button)findViewById(R.id.button_2);
         button_3 = (Button)findViewById(R.id.button_3);
 
+        downloadData();
+
         button_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +143,9 @@ public class MainActivity extends AppCompatActivity
         button_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+                intent.putExtra("list",list);
+                startActivity(intent);
             }
         });
 
@@ -136,6 +154,57 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Registration.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void downloadData() {
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference().child("Дружинники");
+        list = new ArrayList<>();
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listCount = dataSnapshot.getChildrenCount();
+
+                if (mChildEventListeber == null){
+                    mChildEventListeber = new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            druzinnik = dataSnapshot.getValue(Druzinnik.class);
+                            list.add(druzinnik);
+                            if (list.size()==listCount){
+                                button_2.setEnabled(true);
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    };
+                    reference.addChildEventListener(mChildEventListeber);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

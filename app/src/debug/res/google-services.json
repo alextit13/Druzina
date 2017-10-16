@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "219677974855",
+    "firebase_url": "https://druzina-4bca3.firebaseio.com",
+    "project_id": "druzina-4bca3",
+    "storage_bucket": "druzina-4bca3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219677974855:android:18057223ba78b9ef",
+        "android_client_info": {
+          "package_name": "com.accherniakocich.android.druzina"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219677974855-qcoh9fr2jo8vm6750027u9fh86mkgbh2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.accherniakocich.android.druzina",
+            "certificate_hash": "f0708e3b3509553e18f32dcaec283ef465289002"
+          }
+        },
+        {
+          "client_id": "219677974855-9aioos9jpjc9ga3ij111scan6ulpk3qd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7J-OKnBv3f2Gz3hzBH9b2Olevw_I-nYU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219677974855-9aioos9jpjc9ga3ij111scan6ulpk3qd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

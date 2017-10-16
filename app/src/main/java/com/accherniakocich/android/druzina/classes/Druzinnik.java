@@ -9,15 +9,20 @@ public class Druzinnik implements Serializable{
     private String numberPhone;
     private String numberUdostoverenie;
 
+    private double lat;
+    private double lon;
+
     public Druzinnik() {
     }
 
-    public Druzinnik(String FIO, String rayon, String marshrut, String numberPhone, String numberUdostoverenie) {
+    public Druzinnik(String FIO, String rayon, String marshrut, String numberPhone, String numberUdostoverenie, double lat, double lon) {
         this.FIO = FIO;
         this.rayon = rayon;
         this.marshrut = marshrut;
         this.numberPhone = numberPhone;
         this.numberUdostoverenie = numberUdostoverenie;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public String getFIO() {
@@ -58,5 +63,21 @@ public class Druzinnik implements Serializable{
 
     public void setNumberUdostoverenie(String numberUdostoverenie) {
         this.numberUdostoverenie = numberUdostoverenie;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 }

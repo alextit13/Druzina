@@ -8,16 +8,18 @@ public class Zaloba implements Serializable {
     private String FIOZayavitelya;
     private String gotovPisatZayavlenie;
     private String opisanie;
+    private String kontakti;
 
     public Zaloba() {
     }
 
-    public Zaloba(String character, String adress, String FIOZayavitelya, String gotovPisatZayavlenie, String opisanie) {
+    public Zaloba(String character, String adress, String FIOZayavitelya, String gotovPisatZayavlenie, String opisanie, String kontakti) {
         this.character = character;
         this.adress = adress;
         this.FIOZayavitelya = FIOZayavitelya;
         this.gotovPisatZayavlenie = gotovPisatZayavlenie;
         this.opisanie = opisanie;
+        this.kontakti = kontakti;
     }
 
     public String getCharacter() {
@@ -58,5 +60,13 @@ public class Zaloba implements Serializable {
 
     public void setOpisanie(String opisanie) {
         this.opisanie = opisanie;
+    }
+
+    public String getKontakti() {
+        return kontakti;
+    }
+
+    public void setKontakti(String kontakti) {
+        this.kontakti = kontakti;
     }
 }

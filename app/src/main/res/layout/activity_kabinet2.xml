@@ -15,6 +15,13 @@
         android:text="@string/kabinet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/na_p"
+        android:textAlignment="center"
+        android:layout_margin="10sp"
+        android:text="@string/na_patrule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <Button
         android:background="#15ff00"
         android:id="@+id/narushenie_zafiksirovano"
@@ -35,7 +42,7 @@
         android:layout_marginStart="30sp"
         android:layout_marginEnd="30sp"
         android:text="@string/btn_sos"
-        android:layout_weight="1.6"
+        android:layout_weight="1.2"
         android:id="@+id/btn_sos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

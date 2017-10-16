@@ -3,22 +3,25 @@ package com.accherniakocich.android.druzina.Button_1;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
+import com.accherniakocich.android.druzina.MainActivity;
 import com.accherniakocich.android.druzina.R;
+import com.accherniakocich.android.druzina.classes.Zaloba;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class DannieZayavitelya extends AppCompatActivity {
 
-    private String rayon,harakter;
+    private String rayon,harakter,adress,FIOzayavitelya,gotovPisat,opisanie,kontakti;
     private EditText ed1,ed2,ed3,ed_sit;
     private RadioButton cb1,cb2;
     private Button b1,b2;
-
     private FirebaseDatabase database;
     private DatabaseReference reference;
 
@@ -57,13 +60,45 @@ public class DannieZayavitelya extends AppCompatActivity {
         Intent intent = getIntent();
         rayon = intent.getStringExtra("rayon");
         harakter = intent.getStringExtra("harakter");
-    }
 
-    public void click(View v) {
         database = FirebaseDatabase.getInstance();
         reference = database.getReference();
 
-        reference.setValue("rayon = "+rayon+ ", harakter = " + harakter);
-        finish();
+        Log.d(MainActivity.LOG_TAG,"database = " + database);
+        Log.d(MainActivity.LOG_TAG,"reference = " + reference.getRef());
+    }
+
+    public void click(View v) {
+
+        adress = ed1.getText().toString();
+        FIOzayavitelya = ed3.getText().toString();
+
+        if (cb1.isChecked()){
+            gotovPisat = "да";
+        }else{
+            gotovPisat = "нет";
+        }
+
+        opisanie = ed_sit.getText().toString();
+        kontakti = ed2.getText().toString();
+
+        Zaloba zaloba = new Zaloba(harakter,adress,FIOzayavitelya,gotovPisat,opisanie,kontakti);
+
+        reference.child("Заявки").child(FIOzayavitelya).setValue(zaloba);
+
+        ed1.setText("");
+        ed2.setText("");
+        ed3.setText("");
+        ed_sit.setText("");
+
+        if (cb1.isChecked()){
+            cb1.setChecked(false);
+        }
+        if (cb2.isChecked()){
+            cb2.setChecked(false);
+        }
+
+        Toast.makeText(DannieZayavitelya.this,"Заявка отправлена!",Toast.LENGTH_LONG).show();
+
     }
 }
