@@ -165,18 +165,12 @@ public class Registration extends Activity {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("name.txt", Context.MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
-            Log.d(MainActivity.LOG_TAG, "ok");
+            //Log.d(MainActivity.LOG_TAG, "ok");
         }
         catch (IOException e) {
             Log.d(MainActivity.LOG_TAG, "File write failed: " + e.toString());
         }
     }
-
-
-
-
-
-
 
     @Override
     protected void onResume() {
@@ -187,7 +181,7 @@ public class Registration extends Activity {
                 public void onReceive(Context context, Intent intent) {
 
                     //na_patrule.append("\n"+intent.getExtras().get("coordinates"));
-                    Log.d(MainActivity.LOG_TAG,"coor = " + intent.getExtras().get("coordinates"));
+                    //Log.d(MainActivity.LOG_TAG,"coor = " + intent.getExtras().get("coordinates"));
 
                 }
             };
