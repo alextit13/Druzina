@@ -1,29 +1,35 @@
 package com.accherniakocich.android.druzina.Button_3;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.accherniakocich.android.druzina.Kabinet;
 import com.accherniakocich.android.druzina.MainActivity;
 import com.accherniakocich.android.druzina.R;
 import com.accherniakocich.android.druzina.classes.Druzinnik;
+import com.accherniakocich.android.druzina.classes.GPS_Service;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-public class Registration extends AppCompatActivity {
+public class Registration extends Activity {
 
     private EditText et_1,et_2,et_3,et_4,et_5;
     private TextView na_patrule;
@@ -36,13 +42,17 @@ public class Registration extends AppCompatActivity {
     public static final String SAVED_TEXT = "saved_druzinnik";
     SharedPreferences.Editor ed;
     private Druzinnik druzinnik;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kabinet);
-
         init();
+        if(!runtime_permissions())
+            enable_buttons();
+
+
     }
 
     private void init() {
@@ -60,21 +70,8 @@ public class Registration extends AppCompatActivity {
         button_lich_kab = (Button) findViewById(R.id.button_lich_kab);
 
         button_registration_zastup = (Button) findViewById(R.id.button_registration_zastup);
-        button_registration_zastup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickButton(); // аступили на дежурство
-            }
-        });
 
         button_registration_end = (Button) findViewById(R.id.button_registration_end);
-        button_registration_end.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // удаляем данные о дружиннике из бызы данных
-                deleteDruzinnikFromDatabase();// закончили дежурство
-            }
-        });
 
         if (sharedPreferences.getAll().isEmpty()){
             Log.d(MainActivity.LOG_TAG,"sPref = " + sharedPreferences.getAll());
@@ -111,6 +108,9 @@ public class Registration extends AppCompatActivity {
     }
 
     private void clickButton() {
+
+
+
         druzinnik = new Druzinnik(et_1.getText().toString(),et_2.getText().toString(),et_3.getText().toString(),
                 et_4.getText().toString(),et_5.getText().toString(),0,0);
         reference.child("Дружинники").child(et_1.getText().toString()).setValue(druzinnik);
@@ -122,6 +122,7 @@ public class Registration extends AppCompatActivity {
         et_5.setText("");
 
         Toast.makeText(Registration.this,"Дружинник заступил на патрулирование",Toast.LENGTH_SHORT).show();
+
         na_patrule.setText("На патрулировании " + druzinnik.getFIO());
         saveDruzinnik(druzinnik);
         button_registration_zastup.setEnabled(false);
@@ -135,6 +136,9 @@ public class Registration extends AppCompatActivity {
         ed.commit();
 
         writeToFile(druzinnik.getFIO(),this);
+
+
+
         //setDefaults(SAVED_TEXT,druzinnik.getFIO(),this);
     }
 
@@ -146,9 +150,10 @@ public class Registration extends AppCompatActivity {
         ed.clear();
         ed.commit();
 
-
         Toast.makeText(Registration.this,"Патрулирование окончено",Toast.LENGTH_SHORT).show();
         na_patrule.setText("Сейчас на патрулировании");
+
+
 
         button_registration_zastup.setEnabled(true);
         button_registration_end.setEnabled(false);
@@ -164,6 +169,82 @@ public class Registration extends AppCompatActivity {
         }
         catch (IOException e) {
             Log.d(MainActivity.LOG_TAG, "File write failed: " + e.toString());
+        }
+    }
+
+
+
+
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(broadcastReceiver == null){
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    //na_patrule.append("\n"+intent.getExtras().get("coordinates"));
+                    Log.d(MainActivity.LOG_TAG,"coor = " + intent.getExtras().get("coordinates"));
+
+                }
+            };
+        }
+        registerReceiver(broadcastReceiver,new IntentFilter("location_update"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(broadcastReceiver != null){
+            unregisterReceiver(broadcastReceiver);
+        }
+    }
+
+    private void enable_buttons() {
+
+        button_registration_zastup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickButton();
+                Intent i =new Intent(getApplicationContext(),GPS_Service.class);
+                startService(i);
+            }
+        });
+
+        button_registration_end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteDruzinnikFromDatabase();
+                Intent i = new Intent(getApplicationContext(),GPS_Service.class);
+                stopService(i);
+
+            }
+        });
+    }
+
+    private boolean runtime_permissions() {
+        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},100);
+
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 100){
+            if( grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                enable_buttons();
+            }else {
+                runtime_permissions();
+            }
         }
     }
 }
