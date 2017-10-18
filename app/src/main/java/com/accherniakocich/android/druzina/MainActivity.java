@@ -17,6 +17,7 @@ import android.widget.Button;
 
 import com.accherniakocich.android.druzina.Button_1.Rayons;
 import com.accherniakocich.android.druzina.Button_3.Registration;
+import com.accherniakocich.android.druzina.classes.AboutUs;
 import com.accherniakocich.android.druzina.classes.Druzinnik;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -80,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //
+        // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -106,17 +108,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            Intent intent = new Intent(MainActivity.this,AboutUs.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
