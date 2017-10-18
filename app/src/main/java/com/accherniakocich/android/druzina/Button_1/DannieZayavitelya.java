@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class DannieZayavitelya extends AppCompatActivity {
 
-    private String rayon,harakter,adress,FIOzayavitelya,gotovPisat,opisanie,kontakti;
+    private String rayon,harakter,adress,FIOzayavitelya,gotovPisat,opisanie,kontakti,obrabotana;
     private EditText ed1,ed2,ed3,ed_sit;
     private RadioButton cb1,cb2;
     private Button b1,b2;
@@ -81,8 +81,9 @@ public class DannieZayavitelya extends AppCompatActivity {
 
         opisanie = ed_sit.getText().toString();
         kontakti = ed2.getText().toString();
+        obrabotana = "не обработана";
 
-        Zaloba zaloba = new Zaloba(harakter,adress,FIOzayavitelya,gotovPisat,opisanie,kontakti);
+        Zaloba zaloba = new Zaloba(harakter,adress,FIOzayavitelya,gotovPisat,opisanie,kontakti,obrabotana);
 
         reference.child("Заявки").child(FIOzayavitelya).setValue(zaloba);
 

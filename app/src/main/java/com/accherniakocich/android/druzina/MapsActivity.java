@@ -44,50 +44,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference().child("Дружинники");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference().child("Дружинники");
-
-
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         readFile();
-        downloadDataList();
-        mMap = googleMap;
 
-        /*LatLng sydney = new LatLng(-34, 151);
+        Log.d(MainActivity.LOG_TAG,"ssssstart 1");
+
+        downloadDataList(googleMap);
+
+
+        /*LatLng ll = new LatLng(55,37);
+        googleMap.addMarker(new MarkerOptions().position(ll).title(name));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ll,13f));*/
+
+        /*LatLng sydney = new LatLng(50, 50);
         mMap.addMarker(new MarkerOptions().position(sydney).title(name));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-        final MarkerOptions mo = new MarkerOptions().title(name);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(MainActivity.LOG_TAG,"change cancelled");
-                downloadDataList();
-
-                for (int i = 0;i<list.size();i++){
-                    Log.d(MainActivity.LOG_TAG,"item: lat = " + list.get(i).getLat() + ", lon = " + list.get(i).getLon());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(MainActivity.LOG_TAG,"change cancelled");
-            }
-        });
-        */
-
-        LatLng sydney = new LatLng(50, 50);
-        mMap.addMarker(new MarkerOptions().position(sydney).title(name));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,17f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,17f));*/
 
         // Add a marker in Sydney and move the camera
 
@@ -119,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Log.d(MainActivity.LOG_TAG,"name = "+name);
     }
 
-    private void downloadDataList(){
+    private void downloadDataList(final GoogleMap map){
         list = new ArrayList<>();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -138,7 +118,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                 Log.d(MainActivity.LOG_TAG,"countListData = "+ list.size());
 
+
+
                                 for (int i = 0; i<list.size();i++){
+                                    LatLng ll = new LatLng(list.get(0).getLat(),list.get(0).getLon());
+                                    map.addMarker(new MarkerOptions().position(ll).title(list.get(0).getFIO()));
+                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(ll,13f));
                                     Log.d(MainActivity.LOG_TAG,"item = " + list.get(i).getFIO());
                                 }
                                 /*progress_bar.setVisibility(View.GONE);

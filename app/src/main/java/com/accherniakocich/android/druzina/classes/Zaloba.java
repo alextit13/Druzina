@@ -9,17 +9,19 @@ public class Zaloba implements Serializable {
     private String gotovPisatZayavlenie;
     private String opisanie;
     private String kontakti;
+    private String obrabotana;
 
     public Zaloba() {
     }
 
-    public Zaloba(String character, String adress, String FIOZayavitelya, String gotovPisatZayavlenie, String opisanie, String kontakti) {
+    public Zaloba(String character, String adress, String FIOZayavitelya, String gotovPisatZayavlenie, String opisanie, String kontakti, String obrabotana) {
         this.character = character;
         this.adress = adress;
         this.FIOZayavitelya = FIOZayavitelya;
         this.gotovPisatZayavlenie = gotovPisatZayavlenie;
         this.opisanie = opisanie;
         this.kontakti = kontakti;
+        this.obrabotana = obrabotana;
     }
 
     public String getCharacter() {
@@ -68,5 +70,13 @@ public class Zaloba implements Serializable {
 
     public void setKontakti(String kontakti) {
         this.kontakti = kontakti;
+    }
+
+    public String getObrabotana() {
+        return obrabotana;
+    }
+
+    public void setObrabotana(String obrabotana) {
+        this.obrabotana = obrabotana;
     }
 }
