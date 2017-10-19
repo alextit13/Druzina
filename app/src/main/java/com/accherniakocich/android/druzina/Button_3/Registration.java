@@ -107,27 +107,27 @@ public class Registration extends Activity {
         deleteDruzinnik();
     }
 
-    private void clickButton() {
+    private void clickButton(){
+
+            druzinnik = new Druzinnik(et_1.getText().toString(),et_2.getText().toString(),et_3.getText().toString(),
+                    et_4.getText().toString(),et_5.getText().toString(),0,0);
+            reference.child("Дружинники").child(et_1.getText().toString()).setValue(druzinnik);
+
+            et_1.setText("");
+            et_2.setText("");
+            et_3.setText("");
+            et_4.setText("");
+            et_5.setText("");
+
+            Toast.makeText(Registration.this,"Дружинник заступил на патрулирование",Toast.LENGTH_SHORT).show();
+
+            na_patrule.setText("На патрулировании " + druzinnik.getFIO());
+            saveDruzinnik(druzinnik);
+            button_registration_zastup.setEnabled(false);
+            button_registration_end.setEnabled(true);
+            button_lich_kab.setEnabled(true);
 
 
-
-        druzinnik = new Druzinnik(et_1.getText().toString(),et_2.getText().toString(),et_3.getText().toString(),
-                et_4.getText().toString(),et_5.getText().toString(),0,0);
-        reference.child("Дружинники").child(et_1.getText().toString()).setValue(druzinnik);
-
-        et_1.setText("");
-        et_2.setText("");
-        et_3.setText("");
-        et_4.setText("");
-        et_5.setText("");
-
-        Toast.makeText(Registration.this,"Дружинник заступил на патрулирование",Toast.LENGTH_SHORT).show();
-
-        na_patrule.setText("На патрулировании " + druzinnik.getFIO());
-        saveDruzinnik(druzinnik);
-        button_registration_zastup.setEnabled(false);
-        button_registration_end.setEnabled(true);
-        button_lich_kab.setEnabled(true);
     }
 
     private void saveDruzinnik(Druzinnik druzinnik){
@@ -202,9 +202,14 @@ public class Registration extends Activity {
         button_registration_zastup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickButton();
-                Intent i =new Intent(getApplicationContext(),GPS_Service.class);
-                startService(i);
+                if (!et_1.getText().toString().equals("")){
+                    clickButton();
+                    Intent i =new Intent(getApplicationContext(),GPS_Service.class);
+                    startService(i);
+                }else{
+                    Toast.makeText(Registration.this, "Введите данные дружинника", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

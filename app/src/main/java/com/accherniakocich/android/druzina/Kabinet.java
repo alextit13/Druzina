@@ -2,6 +2,7 @@ package com.accherniakocich.android.druzina;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,6 +68,12 @@ public class Kabinet extends AppCompatActivity {
         listNarusheniya = new ArrayList<>();
         preferences = getPreferences(MODE_PRIVATE);
         sos = (Button) findViewById(R.id.btn_sos);
+        sos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPolice();
+            }
+        });
         btn_zafiksirovali = (Button) findViewById(R.id.narushenie_zafiksirovano);
         listView = (ListView) findViewById(R.id.list_view);
 
@@ -92,6 +99,12 @@ public class Kabinet extends AppCompatActivity {
         Intent intent = getIntent();
         String druzinnikFiO = intent.getStringExtra("druzinnik");
         na_p.setText("Сейчас на патрулировании: "+druzinnikFiO);
+    }
+
+    private void callPolice() {
+        Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "112"));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 
     private void fiksatsia() {

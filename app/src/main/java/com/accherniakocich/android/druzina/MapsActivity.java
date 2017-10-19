@@ -112,20 +112,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             druzinnik = dataSnapshot.getValue(Druzinnik.class);
                             list.add(druzinnik);
-
                             if (list.size()==countListData){
                                 //confirmList();
 
-                                Log.d(MainActivity.LOG_TAG,"countListData = "+ list.size());
+                                reference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Log.d(MainActivity.LOG_TAG,"countListData = "+ list.size());
+
+                                        map.clear();
 
 
+                                        for (int i = 0; i<list.size();i++){
 
-                                for (int i = 0; i<list.size();i++){
-                                    LatLng ll = new LatLng(list.get(0).getLat(),list.get(0).getLon());
-                                    map.addMarker(new MarkerOptions().position(ll).title(list.get(0).getFIO()));
-                                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(ll,13f));
-                                    Log.d(MainActivity.LOG_TAG,"item = " + list.get(i).getFIO());
-                                }
+                                            LatLng ll = new LatLng(list.get(i).getLat(),list.get(i).getLon());
+                                            map.addMarker(new MarkerOptions().position(ll).title(list.get(i).getFIO() + "\n" + list.get(i).getLat() + " - " + list.get(i).getLon()));
+                                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(ll,14f));
+                                            Log.d(MainActivity.LOG_TAG,"item = " + list.get(i).getFIO());
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                                 /*progress_bar.setVisibility(View.GONE);
                                 container.setAlpha(1f);
                                 find_button.setEnabled(true);*/
